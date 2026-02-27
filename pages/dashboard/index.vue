@@ -146,7 +146,7 @@
 import moment from 'moment'
 
 definePageMeta({
-  middleware: 'auth'
+  auth: true
 })
 
 const { data: session, signOut } = useAuth()
