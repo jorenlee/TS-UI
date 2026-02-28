@@ -50,14 +50,14 @@
 </template>
 
 <script setup>
-const { signIn } = useAuth()
+const { login } = useAuth()
 
 const techSavvyLogo = ref(
   "https://lsu-media-styles.sgp1.digitaloceanspaces.com/test/img/logo/TechSavvyLogo.png"
 );
 
-const handleLogin = async () => {
-  await signIn('google', { callbackUrl: '/dashboard' })
+const handleLogin = () => {
+  login()
 };
 
 const goToHomepage = () => {

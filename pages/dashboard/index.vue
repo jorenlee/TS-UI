@@ -28,8 +28,8 @@
               <p class="text-sm opacity-90 mb-2">Welcome back to your dashboard</p>
 
               <div class="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 inline-block">
-                <p class="font-bold text-lg">{{ session?.user?.name?.toUpperCase() || 'USER' }}</p>
-                <p class="text-xs opacity-90">{{ session?.user?.email || '' }}</p>
+                <p class="font-bold text-lg">{{ user?.name?.toUpperCase() || 'USER' }}</p>
+                <p class="text-xs opacity-90">{{ user?.email || '' }}</p>
               </div>
 
               <div class="flex items-center gap-2 mt-3 text-sm">
@@ -146,10 +146,10 @@
 import moment from 'moment'
 
 definePageMeta({
-  auth: true
+  middleware: 'auth'
 })
 
-const { data: session, signOut } = useAuth()
+const { user, setAuth, logout } = useAuth()
 
 const currentTime = ref('')
 const currentDate = ref('')
@@ -158,7 +158,7 @@ const showLogoutModal = ref(false)
 const profileImage = ref(null)
 
 const userInitials = computed(() => {
-  const name = session.value?.user?.name || 'USER'
+  const name = user.value?.name || 'USER'
   const nameParts = name.split(' ')
   if (nameParts.length >= 2) {
     return (nameParts[0][0] + nameParts[1][0]).toUpperCase()
@@ -185,9 +185,9 @@ const handleLogout = () => {
   showLogoutModal.value = true
 }
 
-const confirmLogout = async () => {
+const confirmLogout = () => {
   showLogoutModal.value = false
-  await signOut({ callbackUrl: '/login' })
+  logout()
 }
 
 const handleImageError = () => {
@@ -195,23 +195,26 @@ const handleImageError = () => {
 }
 
 onMounted(() => {
+  // Read token from URL if coming from OAuth callback
+  const urlParams = new URLSearchParams(window.location.search)
+  const urlToken = urlParams.get('token')
+  if (urlToken) {
+    setAuth(urlToken)
+    window.history.replaceState({}, '', '/dashboard')
+  } else {
+    const { init } = useAuth()
+    init()
+  }
+
   updateTime()
   setInterval(updateTime, 1000)
 
-  // Debug: Log session data
-  console.log('Session data:', session.value)
-  console.log('User image:', session.value?.user?.image)
-
-  // Set profile image if available
-  if (session.value?.user?.image) {
-    profileImage.value = session.value.user.image
+  if (user.value?.image) {
+    profileImage.value = user.value.image
   }
 })
 
-// Watch for session changes
-watch(() => session.value?.user?.image, (newImage) => {
-  if (newImage) {
-    profileImage.value = newImage
-  }
+watch(() => user.value?.image, (newImage) => {
+  if (newImage) profileImage.value = newImage
 })
 </script>
