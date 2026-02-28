@@ -1,6 +1,6 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-[#1a0b2e] via-[#2d1b4e] to-[#1a0b2e] p-6">
-    <div class="max-w-7xl mx-auto">
+  <div class="min-h-screen bg-gradient-to-br from-[#1a0b2e] via-[#2d1b4e] to-[#1a0b2e] p-3">
+    <div class="">
       <!-- Header Card -->
       <div class="bg-gradient-to-r from-[#2d8659] to-[#1a5c3a] rounded-3xl shadow-2xl p-8 mb-6">
         <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
@@ -102,6 +102,11 @@
           <h3 class="text-gray-600 text-sm mb-1">Logout</h3>
           <p class="text-2xl font-bold text-gray-800">Exit</p>
         </div>
+      </div>
+
+
+      <div class="mb-20" v-if="user?.email === 'jorenleeluna24@gmail.com'">
+        <Members />
       </div>
 
       <!-- Content Area -->

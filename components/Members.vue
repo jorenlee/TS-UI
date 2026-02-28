@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative min-h-screen overflow-hidden flex items-center justify-center lg:p-6 p-2 bg-gradient-to-br from-[#090014] via-[#120024] to-[#1a0033]"
+    class="relative min-h-screen overflow-hidden flex items-center justify-center"
   >
     <!-- ✨ Sparkles (SSR-safe) -->
     <div class="absolute inset-0 pointer-events-none">
@@ -14,7 +14,7 @@
 
     <!-- 🪟 Card -->
     <div
-      class="relative w-full max-w-[95%] rounded-3xl lg:p-8 p-3 text-white bg-[#14002b]/80 backdrop-blur-xl border border-violet-500/30"
+      class="relative w-full rounded-3xl text-white bg-[#14002b]/80 backdrop-blur-xl border border-violet-500/30"
     >
       <!-- Logos -->
       <div class="flex items-center gap-x-3 w-fit mx-auto mb-6">
@@ -87,12 +87,23 @@
                 </div>
               </td>
 
-              <!-- ID Number (Read-only) -->
-              <td class="p-2 whitespace-nowrap">
-                <i class="fa fa-link text-xs mr-1"></i>
+              <!-- ID Number -->
+              <td class="p-2 flex items-center mt-4">
+             
                 <a :href="`/${member.idNumber}`" class="text-violet-300 text-sm font-mono hover:font-bold">
-                  {{ member.idNumber }}
+                  <i class="fa fa-link text-xs mr-1"></i>
                 </a>
+
+                 <input
+                  type="text"
+                  v-model="member.idNumber"
+                  @blur="updateField(member.id, 'idNumber', member.idNumber)"
+                  @keyup.enter="$event.target.blur()"
+                  class="w-[130px] bg-transparent border border-violet-500/30 rounded px-2 py-1 text-sm focus:border-violet-400 focus:outline-none transition-colors"
+                  :class="{ 'border-green-500': savingStates[`${member.id}-idNumber`] === 'saved' }"
+                />
+
+
               </td>
 
               <!-- First Name -->
